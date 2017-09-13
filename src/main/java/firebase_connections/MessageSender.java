@@ -17,7 +17,7 @@ class MessageSender {
         this.host = "fcm.googleapis.com";
         this.requestMethod = "POST";
         this.contentType = "application/json;charset=utf-8";
-        this.serverKey = "key=AAAAWIW7wSk:APA91bHP4EdV6BASzL7DKk78okinJFhp-7R5QAm74QxoK5RdGNFXnnuM6ZetGk3L-xmYduhcJi6ReuiTIqvSxcv8OStTTkC2gZgCO_0f2lnfUAiIgcAFQWbbZlf5dNijCKnKFJLt84_1";
+        this.serverKey = resourceBundle.getString("firebase_key");
     }
 
     void postMessage() throws Exception {

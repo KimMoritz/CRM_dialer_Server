@@ -26,7 +26,9 @@ public class CrmAppserverApplication {
 		sforceClient = new SForceClient();
 		DeviceHandler.updateDevices(new String[] {
 				sforceClient.getDeviceToken(DeviceHandler.getDevice(0).getPhoneNumber()),
-				sforceClient.getDeviceToken(DeviceHandler.getDevice(1).getPhoneNumber())
+				sforceClient.getDeviceToken(DeviceHandler.getDevice(1).getPhoneNumber()),
+				sforceClient.getDeviceToken(DeviceHandler.getDevice(2).getPhoneNumber()),
+				sforceClient.getDeviceToken(DeviceHandler.getDevice(3).getPhoneNumber())
 		});
 	}
 
@@ -40,7 +42,7 @@ public class CrmAppserverApplication {
 			//System.out.println("Caller: " + callerPhoneNumber + ", " + "Called: "+calledPhoneNumber);
 			callerPhoneNumber = "00" + callerPhoneNumber.substring(5);
 			calledPhoneNumber = "00" + calledPhoneNumber.substring(5, calledPhoneNumber.indexOf("@"));
-			//System.out.println("Caller: "+callerPhoneNumber + ", " + "Called: "+calledPhoneNumber);
+			System.out.println("Caller: "+callerPhoneNumber + ", " + "Called: "+calledPhoneNumber);
 			String[] contactInfo = sforceClient.getSFInfo(callerPhoneNumber);
 			gcmNotification.messageFirebase(contactInfo, calledPhoneNumber);
 		} catch (Exception e) {

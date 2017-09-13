@@ -12,26 +12,36 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Component
 public class SForceClient {
 
-    private static final String userName = "kim.moritz@hotmail.com";
-    private static final String password = "android85E0nhX7WC3hGgxVNzpPrsy5kf";
-    private static final String loginInstanceDomain = "eu11.salesforce.com";
-    private static final String apiVersion = "35.0";
-    private static final String consumerKey = "3MVG9HxRZv05HarSSKOz_qitnTXyVreFpShwlunVa6VXzHTm_I2AgrLPUyorQJxHILsy0D2wgQUjLqqDWa6NY";
-    private static final String consumerSecret = "2887835787691552652";
+    private static final String userName = resourceBundle.getString("sf_username");
+    private static final String password = resourceBundle.getString("sf_password");
+    private static final String loginInstanceDomain = resourceBundle.getString("sf_logininstancedomain");
+    private static final String apiVersion = esourceBundle.getString("sf_apiversion");
+    private static final String consumerKey = resourceBundle.getString("sf_consumerkey");
+    private static final String consumerSecret = resourceBundle.getString("sf_consumersecret");
     private static final String grantType = "password";
     private Header oauthHeader;
     private Header prettyPrintHeader = new BasicHeader("X-PrettyPrint", "1");
+    private Timer timer;
 
     public SForceClient(){
+        timer = new Timer();
+        TimerTask hourlyLogin = new TimerTask() {
+            @Override
+            public void run() {
+                oauth2Login();
+            }
+        };
+        timer.schedule(hourlyLogin, 1800000,3600000);
         oauth2Login();
     }
 
@@ -91,6 +101,7 @@ public class SForceClient {
             if (statusCode == 200) {
                 JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
                 JSONObject json2 = new JSONObject(EntityUtils.toString(response2.getEntity()));
+                System.out.println(json.getJSONArray("records").getJSONObject(0).getString("Id"));
                 contactInfo[0] = json.getJSONArray("records").getJSONObject(0).getString("Name");
                 contactInfo[1] = json.getJSONArray("records").getJSONObject(0).getString("Phone");
                 contactInfo[2] = json.getJSONArray("records").getJSONObject(0).getString("Email");
